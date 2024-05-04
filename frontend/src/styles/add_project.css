@@ -1,0 +1,78 @@
+@import "./variables.css";
+
+.add-proj-req-form {
+  display: flex;
+  justify-content: center;
+}
+.add-project {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  padding: 20px;
+  background-color: var(--secondary--color-1);
+  border-radius: 10px;
+  text-shadow: 2px 2px 4px rgba(211, 211, 211, 0.5) !important;
+}
+.add-project .field {
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
+  color: var(--color-grey-100) !important   ;
+}
+.add-project .field input {
+  color: var(--color-custom-1);
+  border-radius: 5px;
+  outline: none;
+  border: solid 2px var(--color-grey-300);
+  background-color: var(--color-grey-200);
+  padding: 0 35px;
+  border: none;
+  outline: none;
+  font-size: 12px;
+  transition: all 0.2s ease;
+}
+.title input {
+  height: 40px;
+}
+.description input {
+  height: 100px;
+}
+.buttons {
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px;
+  margin: 0px 10px;
+}
+.buttons button {
+  padding: 10px;
+  border-radius: 8px;
+  width: 100px;
+  font-size: 12px;
+  /* color: var(--color-grey-200); */
+  /* background-color: var(--color-custom-3); */
+  outline: none;
+  border: none;
+}
+/* Change the color of outline when input is focused */
+.field input:focus {
+  /* border: 3px solid var(--color-custom-3); */
+}
+
+.category-list {
+  display: flex;
+  flex-wrap: wrap;
+}
+.category-item {
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+}
+
+.field img {
+  border-radius: 10px;
+}
+.category-item label {
+  display: flex;
+  font-size: 9px;
+  width: 80px;
+}

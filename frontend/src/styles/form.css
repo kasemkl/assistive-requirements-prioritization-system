@@ -1,0 +1,172 @@
+@import "./variables.css";
+@import "./sign_up.css";
+.Form {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--secondary--color-1);
+}
+
+.login fieldset {
+  display: flex !important;
+  height: 460px;
+
+  min-width: 480px !important;
+  padding: 30px !important;
+  border: 1px solid #ccc !important;
+  border-radius: 20px !important;
+  flex-direction: column !important;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgb(49 36 73 / 17%);
+}
+
+.Form .title {
+  position: relative;
+  font-size: 27px;
+  font-weight: 600;
+}
+label {
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+sup {
+  color: red;
+  top: -2px;
+  font-size: 95%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+.Form input,
+select {
+  height: 100%;
+  width: 100%;
+  padding: 0 35px;
+  border: none;
+  outline: none;
+  font-size: 12px;
+  border-bottom: 2px solid #ccc;
+  border-top: 2px solid transparent;
+  transition: all 0.2s ease;
+}
+.Form fieldset .field i {
+  position: absolute;
+  top: 50%;
+  transform: translateY(37%);
+  color: #999;
+  font-size: 23px;
+  transition: all 0.2s ease;
+  left: 15px;
+}
+
+.field {
+  position: relative;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 24px;
+  /* display: flex;
+     flex-direction: column; */
+  height: 100%;
+  width: 100%;
+  margin-top: 30px;
+}
+.Form input:focus,
+textarea:focus,
+select:focus {
+  border-bottom-color: var(--netural--800);
+}
+.Form .field input:focus + i {
+  color: var(--netural--800); /* Your desired color */
+}
+
+.field input {
+  color: var(--color-custom-1);
+  border-radius: 5px;
+  outline: none;
+  border: solid 2px var(--color-grey-300);
+  background-color: var(--color-grey-200);
+  padding: 0 35px;
+  border: none;
+  outline: none;
+  font-size: 12px;
+  transition: all 0.2s ease;
+}
+
+fieldset .button button {
+  height: 50px;
+  width: 100%;
+  border: none;
+  color: #fff !important;
+  font-size: 17px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  border-radius: 6px;
+  background-color: var(--neutral--700) !important;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  opacity: 1 !important;
+}
+fieldset .button button:hover {
+  background-color: var(--neutral--600);
+  color: #fff;
+}
+.Form .login-signup {
+  font-size: 12px;
+  text-align: center;
+}
+.Form .login-signup a {
+  text-decoration: none;
+  color: var(--color-blue-700);
+}
+.Form .login-signup a:hover {
+  color: var(--color-brand-900);
+}
+.FieldError {
+  position: absolute;
+  bottom: 6px;
+  color: red;
+  font-size: 12px;
+}
+
+.Row {
+  display: flex;
+  flex-direction: row;
+}
+@media (max-width: 768px) {
+  fieldset {
+    min-width: 280px !important;
+  }
+}
+
+.Form fieldset .field .show-hide {
+  position: absolute;
+  top: 50%;
+  color: #999;
+  font-size: 23px;
+  right: 50px;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="email"]:focus,
+input[type="date"]:focus {
+  outline: none;
+  box-shadow: 0px 0px 5px var(--secondary--color-4);
+  border: 1px solid var(--secondary--color-4);
+}
+
+/* button {
+   padding: 12px;
+   width: 240px;
+   border-radius: 4px;
+   border: 1px solid #ccc;
+   background-color: darkblue;
+   color: white;
+   text-transform: uppercase;
+   font-size: 14px;
+   font-weight: bold;
+   cursor: pointer;
+ } */

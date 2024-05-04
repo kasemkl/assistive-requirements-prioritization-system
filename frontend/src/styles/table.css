@@ -1,0 +1,31 @@
+.table {
+  --mdb-table-font-size: 0.9rem;
+  --mdb-table-divider-color: rgba(0, 0, 0, 0.1);
+  font-size: var(--mdb-table-font-size);
+  background-color: var(--secondary--color-1);
+  padding: 10px !important;
+  border-radius: 10px;
+  color: var(--color-grey-300) !important;
+  text-align: center;
+  caption-side: bottom;
+  border-collapse: separate !important;
+}
+.table > thead {
+  font-size: 16px !important;
+}
+
+.table > tbody {
+  font-size: 14px !important;
+}
+thead,
+tbody,
+tfoot,
+tr,
+td,
+th {
+  color: var(--color-grey-300) !important;
+  border-color: inherit;
+  border-style: solid;
+  border-width: 0;
+  border-block-color: var(--color-custom-5) !important;
+}

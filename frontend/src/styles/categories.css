@@ -1,0 +1,45 @@
+.categories {
+  display: flex;
+  /* justify-content: space-between; */
+  flex-wrap: wrap;
+  padding: 10px;
+  position: relative;
+}
+.category {
+  width: 150px;
+  margin: 10px;
+}
+.add-category {
+  position: absolute;
+  right: 10px;
+  top: -15px;
+  background: var(--color-grey-700);
+  border-radius: 20px;
+  color: var(--color-grey-200) !important;
+  padding: 0 10px !important;
+  font-size: 14px;
+}
+.add-category:hover {
+  background: var(--color-grey-500) !important;
+  color: var(--color-grey-200) !important;
+}
+.edit-cat {
+  display: flex;
+  flex-direction: column;
+}
+.cat-btn {
+  margin: 3px;
+}
+.cat-input {
+  width: 100% !important;
+  margin: 10px 0;
+}
+.form-outline {
+  background-color: var(--color-grey-200);
+}
+.cat-input input[type="text"] {
+  height: 50px;
+}
+.cat-input input[type="file"] {
+  height: 30px;
+}

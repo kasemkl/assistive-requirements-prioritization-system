@@ -1,0 +1,52 @@
+.sign-up fieldset {
+  display: flex !important;
+  min-width: 400px !important;
+  padding: 25px !important;
+  border: 1px solid #ccc !important;
+  border-radius: 20px !important;
+  flex-direction: column !important;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgb(152 147 159 / 54%);
+}
+.sign-up .field {
+  position: relative;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 10px;
+  height: 40px;
+  width: 100%;
+  margin-top: 5px;
+  margin-bottom: 15px;
+}
+
+.sign-up .avatar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.Form .sign-up .field i {
+  position: absolute;
+  top: 80%;
+  transform: translateY(-10%);
+  color: #999;
+  font-size: 18px;
+  transition: all 0.2s ease;
+  left: 15px;
+}
+.sign-up .field input:focus + i {
+  color: #412262; /* Your desired color */
+}
+.sign-up .button {
+  margin-top: 20px;
+}
+.sign-up fieldset .field .show-hide {
+  top: 85% !important;
+}
+.sign-up .field label {
+  font-size: 12px !important;
+}
+.sign-up .avatar img {
+  width: 80px;
+}

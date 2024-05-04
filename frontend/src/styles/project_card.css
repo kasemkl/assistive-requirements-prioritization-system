@@ -1,0 +1,40 @@
+@import './variables.css';
+.project-card{
+    width: 90%;
+    height: 200px;
+    background-color: var(--secondary--color-1);
+    margin: 20px 10px;
+    padding: 20px;
+    border-radius: 20px;
+    position: relative;
+}
+
+.project-card-inner{
+    display: flex;
+    align-items: center;
+}
+.links{
+    position: absolute;
+    right: 0;
+    top: 33px;
+    display: flex;
+    flex-direction: column;
+}
+
+.link{
+    margin: 10px 10px 0 0;
+    /* width: 100px; */
+    /* height: 40px; */
+    background-color: var(--neutral--400);
+    color: var(--color-grey-100);
+    border-radius: 10px;
+    padding: 10px;
+    text-align: center;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.link:hover{
+    background-color: var( --neutral--300);
+    color: var(--color-grey-100);
+
+}

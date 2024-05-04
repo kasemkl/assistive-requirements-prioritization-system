@@ -1,0 +1,11 @@
+.main-layout {
+  position: absolute;
+  top: 62px;
+  width: 100%;
+}
+
+.error {
+  color: rgb(232, 60, 60) !important;
+  text-shadow: none !important;
+  margin: 5px 0 0 5px;
+}

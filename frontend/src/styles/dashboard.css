@@ -1,0 +1,19 @@
+@import "./variables.css";
+
+.charts {
+  /* background-color: var(--secondary--color-1); */
+  display: flex;
+  flex-wrap: wrap;
+  /* justify-content: space-between; */
+}
+
+.charts svg {
+  background-color: var(--secondary--color-1);
+  border-radius: 15px;
+  padding: 5px;
+  color: #000;
+}
+.chart {
+  margin: 10px;
+  height: 400px;
+}

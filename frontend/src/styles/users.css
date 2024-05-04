@@ -1,0 +1,78 @@
+.users {
+  position: relative;
+}
+
+.user-form {
+  height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent !important;
+}
+.add-user {
+  position: absolute;
+  right: 10px;
+  top: 8px;
+  background: var(--color-grey-700);
+  border-radius: 20px;
+  color: var(--color-grey-200) !important;
+  padding: 0 10px !important;
+  font-size: 14px;
+}
+.add-user:hover {
+  background: var(--color-grey-500) !important;
+  color: var(--color-grey-200) !important;
+}
+
+.add-users fieldset {
+  display: flex !important;
+  min-width: 400px !important;
+  padding: 25px !important;
+  border: 1px solid var(--secondary--color-1) !important;
+  border-radius: 21px !important;
+  flex-direction: column !important;
+  background-color: var(--secondary--color-1);
+  box-shadow: 0 2px 5px rgb(152 147 159 / 31%);
+}
+.add-users .field {
+  position: relative;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 10px;
+  height: 40px;
+  width: 100%;
+  margin-top: 5px;
+  margin-bottom: 15px;
+}
+
+.add-users .avatar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.Form .add-users .field i {
+  position: absolute;
+  top: 80%;
+  transform: translateY(-10%);
+  color: #999;
+  font-size: 18px;
+  transition: all 0.2s ease;
+  left: 15px;
+}
+.add-users .field input:focus + i {
+  color: #412262; /* Your desired color */
+}
+.add-users .button {
+  margin-top: 20px;
+}
+.add-users fieldset .field .show-hide {
+  top: 85% !important;
+}
+.add-users .field label {
+  font-size: 12px !important;
+}
+.add-users .avatar img {
+  width: 80px;
+}
