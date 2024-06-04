@@ -1,17 +1,21 @@
 import React, { useState } from "react";
 import useAxios from "../../../hooks/useAxios";
 import { useParams } from "react-router-dom";
+import { MDBSpinner } from "mdb-react-ui-kit";
+import Modal from "../../../ui/Modal";
 
 const AddRequirement = () => {
   const api = useAxios();
-  const param = useParams();
-  const project_id = parseInt(param.id);
+  const { project_id } = useParams();
   const [formData, setFormData] = useState({
     requirement_text: "",
-    requirements_priority: "low", // Default priority is set to "low"
+    requirements_priority: "low",
     project_id: project_id,
   });
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [modalText, setModalText] = useState({ title: "", body: "" });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -19,7 +23,6 @@ const AddRequirement = () => {
       ...formData,
       [name]: value,
     });
-    // Clear errors for the field being edited
     setErrors({
       ...errors,
       [name]: "",
@@ -27,7 +30,6 @@ const AddRequirement = () => {
   };
 
   const handleSubmit = async () => {
-    // Validate requirement_text field
     if (!formData.requirement_text) {
       setErrors({
         ...errors,
@@ -36,24 +38,33 @@ const AddRequirement = () => {
       return;
     }
 
-    // Here you can handle the submission of the form data
     console.log(formData);
+    setLoading(true);
     try {
       let response = await api.post("add-req", formData);
       let data = await response.data;
       console.log(data);
+      setLoading(false);
       if (response.status === 201) {
-        alert(response.data.message);
+        setModalText({ title: "Success", body: response.data.message });
+        setShowModal(true);
       } else {
-        alert("an error occurs");
+        setModalText({ title: "Error", body: "An error occurred." });
+        setShowModal(true);
       }
     } catch (error) {
       console.log(error);
+      setLoading(false);
+      setModalText({ title: "Error", body: "An error occurred." });
+      setShowModal(true);
     }
   };
 
   return (
     <div className="container">
+      {showModal && (
+        <Modal text={modalText} onHide={() => setShowModal(false)} />
+      )}
       <h1>Add Requirement</h1>
       <div className="add-proj-req-form">
         <div className="add-requirement">
@@ -61,7 +72,7 @@ const AddRequirement = () => {
             <label>Requirement Text</label>
             <input
               type="text"
-              className=""
+              className="form-control"
               name="requirement_text"
               value={formData.requirement_text}
               onChange={handleChange}
@@ -74,7 +85,7 @@ const AddRequirement = () => {
           <div className="field priority">
             <label>Priority</label>
             <select
-              className=""
+              className="form-control"
               name="requirements_priority"
               value={formData.requirements_priority}
               onChange={handleChange}
@@ -84,14 +95,23 @@ const AddRequirement = () => {
               <option value="medium">Medium</option>
               <option value="high">High</option>
             </select>
-            {errors.requirements_priority && (
-              <div className="error">{errors.requirements_priority}</div>
-            )}
           </div>
           <div className="buttons">
-            <button className="btn btn-primary" onClick={handleSubmit}>
-              Add
-            </button>
+            {loading ? (
+              <button className="btn loading-btn" disabled>
+                <MDBSpinner
+                  size="md"
+                  role="status"
+                  tag="span"
+                  className="me-2"
+                />
+                Processing...
+              </button>
+            ) : (
+              <button className="btn btn-primary" onClick={handleSubmit}>
+                Add
+              </button>
+            )}
           </div>
         </div>
       </div>

@@ -3,13 +3,16 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import APIView
 from django.shortcuts import get_object_or_404
-from app.models import ProjectCategory , Project, Requirements
-from app.serializers.project_management import category_serializer , project_information , RequirementSerializer,project_serializer
+from app.models import ProjectCategory , Project, Requirements, Source
+from app.serializers.project_management import category_serializer , project_information , RequirementSerializer,project_serializer,sources_serializer
 from rest_framework.permissions import IsAuthenticated
 from app.permissions import IsSystemAdmin , IsProductOwner
-from app.services.project_services import CSV_File,Excel_File
+from app.services.project_services import CSV_File_requirements , Excel_file_requirements
+from app.services.Rreview_collector import  CSV_File_reviews, excel_file_reviews
 from app.mongoDB_models import Review
-from datetime import datetime
+from app.services.AI.matching import BasicMatcher
+from app.services.AI.sentiment import BasicClassifier
+
 
 
 #done
@@ -31,6 +34,7 @@ class categories_All(APIView):
             response={"message":"adding new category successfully","data":serializer.data}
             return Response(data=response, status=status.HTTP_201_CREATED)
         return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 #done
 #view for the system admin to manage the categories.
@@ -138,9 +142,6 @@ class projectsForOneUser(APIView):
         response={'projects':serializer.data,'number_of_projects':number_of_projects}
         return Response(data=response, status=status.HTTP_200_OK)
 
-
-
-
 #done
 #views for requirements management
 class requirements_CRUD(APIView):
@@ -190,8 +191,7 @@ class add_req(APIView):
 
 
 class add_req_by_file(APIView):
-    # permission_classes=[IsProductOwner]
-
+    permission_classes=[IsProductOwner]
     def post (self, request:Request, pk:int):
         project=get_object_or_404(Project, pk=pk)
         file=request.FILES.get('file')
@@ -199,52 +199,70 @@ class add_req_by_file(APIView):
             return Response(data={'message':"no file provided!"},status=status.HTTP_400_BAD_REQUEST)
         
         if file.name.endswith('.csv'):
-            collector= CSV_File(project,'requirements')
+            collector= CSV_File_requirements(project)
         elif file.name.endswith('.xlsx') or file.name.endswith('.xls'):
-            collector= Excel_File(project,'requirements')
+            collector= Excel_file_requirements(project)
         else:
             return Response(data={'message':"unsupported file format!"}, status=status.HTTP_400_BAD_REQUEST)
         
-        collector.add_from_file(file)
+        collector.add_from_file_req(file)
         return Response(data={'message':"requirements saved successfully"}, status=status.HTTP_200_OK)
-    
-    
+
+
+
 class Reviews(APIView):
-    
+    permission_classes=[IsProductOwner]
+    serializer_class=sources_serializer
+
     def post (self, request:Request, pk:int):
         project=get_object_or_404(Project, pk=pk)
-        file=request.FILES.get('file')
-        if not file:
-            return Response(data={'message':"no file provided!"},status=status.HTTP_400_BAD_REQUEST)
-        
-        if file.name.endswith('.csv'):
-            collector= CSV_File(project,'reviews')
-        elif file.name.endswith('.xlsx') or file.name.endswith('.xls'):
-            collector= Excel_File(project,'reviews')
-        else:
-            return Response(data={'message':"unsupported file format!"}, status=status.HTTP_400_BAD_REQUEST)
-        
-        collector.add_from_file(file)
-        return Response(data={'message':"reviews saved successfully"}, status=status.HTTP_200_OK)
+        data=request.data.copy()
+        data['project_id']=project.id
+        serializer=self.serializer_class(data=data)
+
+        if serializer.is_valid():
+            source=serializer.save()
+            source.save()
+            file=request.FILES.get('file')
+            basic_classifier = BasicClassifier()
+            basic_matcher = BasicMatcher()
+            if not file:
+                return Response(data={'message':"no file provided!"},status=status.HTTP_400_BAD_REQUEST)
+            if file.name.endswith('.csv'):
+                collector= CSV_File_reviews(source,basic_classifier,basic_matcher)
+            elif file.name.endswith('.xlsx') or file.name.endswith('.xls'):
+                collector= excel_file_reviews(source,basic_classifier,basic_matcher)
+            else:
+                return Response(data={'message':"unsupported file format!"}, status=status.HTTP_400_BAD_REQUEST)
+            
+
+            collector.add_from_file_rev(file)
+            return Response(data={'message':"reviews saved successfully"}, status=status.HTTP_200_OK)
+        return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-    def get(self,request,pk):
-        
-        last_10_reviews = Review.objects.filter(project_id=pk).order_by('-date')[:10]
+    def get(self,request: Request,pk:int):
+        last_10_reviews = Review.objects.filter(project_id=pk).order_by('id')[:100]
+        reviews_data = [{'text': review.text, 'date': review.date} for review in last_10_reviews]
+        response= {"data":reviews_data, "message":"reviews related with one project"}
+        return Response(data=response , status=status.HTTP_200_OK)
 
-        reviews_data = [{'content': review.content, 'date': review.date} for review in last_10_reviews]
-        return Response({"data":reviews_data},status=status.HTTP_200_OK)
+class delete_reviews_source(APIView):
+    def delete(self,request:Request,pk:int):
+        reviews=Review.objects.filter(source_id=pk)
+        reviews.delete()
+        reviews_source=get_object_or_404(Source,pk=pk)
+        reviews_source.delete()
+        response={"message":'the reviews has been deleted successfully'}
+        return Response(data=response, status=status.HTTP_204_NO_CONTENT)
 
-class category_dashboard(APIView):
-    permission_classes = [IsSystemAdmin]
-    def get(self,request:Request):
-        categories=ProjectCategory.objects.all()
-        data=[]
 
-        for category in categories:
-            projects_number=Project.objects.filter(category_id=category).count()
-            category_data={
-                "category_name":category.category_name,
-                "projects_number":projects_number
-            }
-            data.append(category_data)
-        return Response(data=data,status=status.HTTP_200_OK)
+
+class sources(APIView):
+    serializer_class=sources_serializer
+    permission_classes=[IsProductOwner]
+
+    def get(self, request:Request, pk:int):
+        sources=Source.objects.filter(project_id=pk)
+        serializer=self.serializer_class(instance=sources, many=True)
+        response={"data":serializer.data,"message":"sources of one project"}
+        return Response(data=response,status=status.HTTP_200_OK)

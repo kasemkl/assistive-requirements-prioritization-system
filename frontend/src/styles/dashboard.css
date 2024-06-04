@@ -1,19 +1,196 @@
 @import "./variables.css";
 
+.dashboard {
+  display: flex;
+}
 .charts {
   /* background-color: var(--secondary--color-1); */
   display: flex;
   flex-wrap: wrap;
-  /* justify-content: space-between; */
+  justify-content: flex-start;
+  width: 60%;
+  align-content: flex-start;
+}
+.charts-2 {
+  width: 30%;
+  margin: 0 10px 0 0;
 }
 
-.charts svg {
-  background-color: var(--secondary--color-1);
-  border-radius: 15px;
-  padding: 5px;
-  color: #000;
-}
 .chart {
   margin: 10px;
+}
+.pie-chart .sentiment {
+  margin: 10px;
+  position: absolute;
+  bottom: 0;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+}
+.pie-chart .positive {
+  right: 10%;
+}
+.pie-chart .negative {
+  right: 35%;
+}
+.pie-chart .neutral {
+  right: 65%;
+}
+
+.pie-chart .square-positive,
+.square-negative,
+.square-neutral {
+  content: "";
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 5px;
+
+  /* background-color: var(--chart-color-blue-100); */
+}
+
+.project-list {
+  width: 30%;
+  display: block;
+  /* height: 100px; */
+  background: var(--secondary--color-1);
+  padding: 20px;
+  border-radius: 20px;
+  margin: 10px;
+  transition: 0.5s ease;
+}
+.project-list:hover {
+  background-color: var(--color-grey-100);
+  color: var(--secondary--color-1) !important;
+}
+
+/* .recharts-wrapper {
+  height: 400px !important;
+} */
+
+.area-chart {
+  margin: 10px;
+  height: 350px;
+  width: 100%;
+
+  position: relative;
+  padding: 10px;
+  background-color: var(--secondary--color-1);
+  border-radius: 20px;
+  /* margin: 0 10px; */
+}
+
+.pie-chart {
+  margin: 10px;
+  height: 320px;
+  /* max-width: 0%; */
+  width: 90%;
+  max-width: 320px;
+  position: relative;
+
+  padding: 10px;
+  background-color: var(--secondary--color-1);
+  border-radius: 20px;
+  /* margin: 0 10px; */
+}
+.bar-chart {
+  margin: 10px;
   height: 400px;
+  width: 100%;
+  /* max-width: 60%; */
+  position: relative;
+
+  padding: 10px;
+  background-color: var(--secondary--color-1);
+  border-radius: 20px;
+  /* margin: 0 10px; */
+}
+.reviews-count {
+  margin: 10px;
+  height: 100px;
+  width: 90%;
+  max-width: 320px;
+  position: relative;
+
+  padding: 10px;
+  background-color: var(--secondary--color-1);
+  border-radius: 20px;
+  /* margin: 0 10px; */
+}
+
+.reviews-number {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  /* flex-direction: column; */
+  color: var(--theme-color-4);
+  font-family: math;
+}
+
+.reviews-number .number {
+  font-size: 18px;
+  margin: 0;
+  font-weight: 600;
+  color: black;
+}
+.reviews-number .text-reviews {
+  font-size: 16px;
+  /* font-weight: 700; */
+  color: var(--theme-color-3);
+}
+.reviews-icon {
+  width: 80px;
+  height: 80px;
+  background-color: var(--chart-color-7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 30px;
+  color: var(--theme-color-3);
+  margin: 10px;
+  border-radius: 15px;
+}
+
+.top-req {
+  margin: 10px;
+  /* height: 400px; */
+  width: 90%;
+  max-width: 320px;
+  position: relative;
+
+  background-color: var(--secondary--color-1);
+  border-radius: 20px;
+  padding: 10px;
+  /* margin: 0 10px; */
+}
+
+.chart-title {
+  font-weight: 600;
+  color: black !important;
+  padding: 10px;
+  font-size: 12px;
+}
+.chart-label {
+  display: flex;
+  margin: 0 10px;
+}
+.chart-label-inner {
+  margin: 0 5px;
+  border: solid 1px var(--color-3);
+  display: flex;
+  align-items: center;
+  padding: 3px;
+  border-radius: 5px;
+}
+.square {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 5px;
+}
+
+.chart-label-inner p {
+  margin: 0 2px;
 }

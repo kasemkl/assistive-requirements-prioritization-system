@@ -1,91 +1,50 @@
 import csv
 import openpyxl
+from dateutil import parser
 from app.models import Requirements
 from app.mongoDB_models import Review
-from datetime import datetime
+# from app.services.AI.matching import generate_embeddings,makeMatching
+from app.serializers.project_management import RequirementSerializer
 
 
-class BaseCollectorTemplate:
-    def __init__(self, project):
-        self.project = project
-        self.parsed_data = []
 
-    def add_from_file(self, data):
+class requirements_collector_template:
+    def __init__(self,project):
+        self.project=project
+        self.parsed_requirements=[]
+    
+    def add_from_file_req (self,data):
         self.parse_data(data)
-        self.save_data()
-
+        self.save_requirements()
+    
     def parse_data(self, data):
-        raise NotImplementedError("Subclasses must implement the parse_data method")
+        raise NotImplementedError("The subclasses of CSV or Excel files must implement this")
+    
+    def save_requirements(self):
+        requirements_objects = [
+            Requirements(
+                requirement_text=req_text,
+                requirements_priority=req_priority,
+                project_id=self.project
+            )
+            for req_text, req_priority in self.parsed_requirements
+        ]
+        Requirements.objects.bulk_create(requirements_objects) # insert multiple records into the database in a single query
 
-    def save_data(self):
-        raise NotImplementedError("Subclasses must implement the save_data method")
-
-class CSV_File(BaseCollectorTemplate):
-    def __init__(self, project, template):
-        super().__init__(project)
-        self.template = template
-
+class CSV_File_requirements(requirements_collector_template):
     def parse_data(self, data):
-        if self.template == 'requirements':
-            self.parsed_data = [(row[0], row[1]) for row in data]
-        elif self.template == 'reviews':
-            self.parsed_data = [{'content': row[0], 'date': datetime.strptime(str(row[1]), '%Y-%m-%d')} for row in data]
+        reader = csv.reader(data.read().decode("utf-8").splitlines())
+        self.parsed_requirements = [(row[0], row[1]) for row in reader]
+#reader is an object created by csv.reader,
+#which reads the CSV file line by line. Each row is a list where each item represents a cell in that row of the CSV file.
 
-
-    def save_data(self):
-        if self.template == 'requirements':
-            requirements_objects = [
-                Requirements(
-                    requirement_text=req_text,
-                    requirements_priority=req_priority,
-                    project_id=self.project
-                )
-                for req_text, req_priority in self.parsed_data
-            ]
-            Requirements.objects.bulk_create(requirements_objects)
-        elif self.template == 'reviews':
-            review_objects = [
-                Review(
-                    project_id=self.project,
-                    content=review_data['content'],
-                    date=review_data['date']
-                )
-                for review_data in self.parsed_data
-            ]
-            Review.objects.bulk_create(review_objects)
-
-
-class Excel_File(BaseCollectorTemplate):
-    def __init__(self, project, template):
-        super().__init__(project)
-        self.template = template
-
+class Excel_file_requirements(requirements_collector_template):
     def parse_data(self, data):
-        workbook = openpyxl.load_workbook(data)
-        sheet = workbook.active
-        if self.template == 'requirements':
-            self.parsed_data = [(row[0].value, row[1].value) for row in sheet.iter_rows(min_row=2)]
-        elif self.template == 'reviews':
-            self.parsed_data = [{'content': row[0].value, 'date': row[1].value} for row in sheet.iter_rows(min_row=2)]
+        workbook=openpyxl.load_workbook(filename=data)
+        sheet=workbook.active
+        self.parsed_requirements = [(row[0].value, row[1].value) for row in sheet.iter_rows(min_row=2)]
 
-    def save_data(self):
-        if self.template == 'requirements':
-            requirements_objects = [
-                Requirements(
-                    requirement_text=req_text,
-                    requirements_priority=req_priority,
-                    project_id=self.project
-                )
-                for req_text, req_priority in self.parsed_data
-            ]
-            Requirements.objects.bulk_create(requirements_objects)
-        elif self.template == 'reviews':
-            review_objects = [
-                Review(
-                    project_id=self.project,
-                    content=review_data['content'],
-                    date=review_data['date']
-                )
-                for review_data in self.parsed_data
-            ]
-            Review.objects.bulk_create(review_objects)
+
+
+
+

@@ -85,8 +85,21 @@ class Requirements(models.Model):
         ('medium', 'Medium'),
         ('high', 'High'),  )
     requirements_priority=models.CharField(max_length=10, choices=REQUIREMENT_PRIORITY_CHOICES)
-    project_id=models.ForeignKey(Project,on_delete=models.CASCADE, related_name='requirements')
+    project_id=models.ForeignKey(Project,on_delete=models.CASCADE, related_name='requirements',db_index=True)
     addition_date=models.DateTimeField(auto_now_add=True)
+    positive_reviews_count=models.IntegerField(default=0)
+    negative_reviews_count=models.IntegerField(default=0)
+    
     def __str__(self):
         return f"{self.id} - {self.requirement_text}"
 
+
+class Source(models.Model):
+    id=models.AutoField(primary_key=True)
+    source_name=models.CharField(max_length=50, null=True)
+    SOURCES_TYPES= (
+        ('1', 'file'),
+        ('2', 'External_API'),
+        ('3', 'Social_Media'),  )
+    source_type=models.CharField(max_length=50, choices=SOURCES_TYPES,default=1)
+    project_id=models.ForeignKey(Project,on_delete=models.CASCADE,related_name='reviews_sources')

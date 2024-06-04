@@ -1,34 +1,49 @@
 import React, { useState } from "react";
 import useAxios from "../../hooks/useAxios";
-import { useParams } from "react-router-dom";
+import Modal from "../../ui/Modal";
 
 const AddCategory = () => {
   const api = useAxios();
   const [categoryName, setCategoryName] = useState("");
   const [categoryPhoto, setCategoryPhoto] = useState(null);
-  const [errors, setErrors] = useState({});
-
+  const [modalText, setModalText] = useState({ title: "", body: "" });
+  const [showModal, setShowModal] = useState(false);
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, files } = e.target;
+
     if (name === "category_name") {
       setCategoryName(value);
     } else if (name === "category_photo") {
-      setCategoryPhoto(e.target.files[0]);
+      const file = files[0];
+      if (file && file.type !== "image/jpeg") {
+        setModalText({
+          title: "File Upload Error",
+          body: "Only JPEG files are allowed.",
+        });
+        setShowModal(true);
+        return;
+      }
+      setCategoryPhoto(file);
     }
-    // Clear errors for the field being edited
-    setErrors({
-      ...errors,
-      [name]: "",
-    });
   };
 
   const handleSubmit = async () => {
     // Validate category_name field
     if (!categoryName) {
-      setErrors({
-        ...errors,
-        category_name: "Category name is required",
+      setModalText({
+        title: "Category Name Error",
+        body: "Category name is required.",
       });
+      setShowModal(true);
+      return;
+    }
+
+    if (!/^[a-zA-Z]+$/.test(categoryName)) {
+      setModalText({
+        title: "Category Name Error",
+        body: "Category name must contain only letters.",
+      });
+      setShowModal(true);
       return;
     }
 
@@ -44,9 +59,11 @@ const AddCategory = () => {
       let data = await response.data;
       console.log(data);
       if (response.status === 201) {
-        alert(response.data.message);
+        setModalText({ title: "Category Adding", body: response.data.message });
+        setShowModal(true);
       } else {
-        alert("An error occurred");
+        setModalText({ title: "Category Adding", body: response.data.message });
+        setShowModal(true);
       }
     } catch (error) {
       console.log(error);
@@ -68,9 +85,6 @@ const AddCategory = () => {
               onChange={handleChange}
               required
             />
-            {errors.category_name && (
-              <div className="error">{errors.category_name}</div>
-            )}
           </div>
           <div className="field cat-input">
             <label>Add category photo</label>
@@ -88,6 +102,15 @@ const AddCategory = () => {
           </div>
         </div>
       </div>
+      {showModal && (
+        <Modal
+          text={modalText}
+          onHide={() => {
+            setShowModal(false);
+            setModalText({ title: "", body: "" });
+          }}
+        />
+      )}
     </div>
   );
 };

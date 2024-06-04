@@ -23,9 +23,9 @@ export default function ReviewTable({ reviews, render, setRender }) {
       </MDBTableHead>
       <MDBTableBody>
         {reviews.map((review, index) => (
-          <tr key={`${review.content + "-" + review.date}`}>
+          <tr key={`${review.text + "-" + review.date}`}>
             <td>
-              <p>{review.content}</p>
+              <p>{review.text}</p>
             </td>
             <td>
               <p>{review.date}</p>

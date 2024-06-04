@@ -50,7 +50,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
           'corsheaders',
-          'djongo'
+          'djongo',
+          'django_extensions'
 
     
 
@@ -206,3 +207,7 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 DATABASE_ROUTERS = ['project.routers.MyDatabaseRouter']
+
+GRAPH_MODELS = {
+  'app_labels': ["app"],
+}

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import UsersTable from "../../features/users/UsersTable";
 import useAxios from "../../hooks/useAxios";
 import { Link } from "react-router-dom";
-import "../styles/users.css";
+import "../../styles/users.css";
 const Users = () => {
   const [users, setUsers] = useState([]);
   const api = useAxios();

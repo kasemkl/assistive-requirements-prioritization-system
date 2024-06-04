@@ -34,7 +34,7 @@ export const AuthProvider = ({ children }) => {
     });
 
     let data = await response.json();
-    console.log(data);
+    // console.log(data);
     if (response.status === 200) {
       setAuthTokens(data);
       setUser(jwtDecode(data.access));
@@ -42,7 +42,9 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem("user", JSON.stringify(jwtDecode(data.access)));
       setIsLoggedIn(true);
       history("/");
+      return { status: response.status, data: data };
     } else {
+      return { status: response.status, data: data };
       alert("Something went wrong!");
     }
   };
@@ -54,7 +56,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("authTokens");
     localStorage.removeItem("user");
     setRender(!render);
-    history("/");
+    history("/login");
   };
 
   let registerUser = async (formData) => {

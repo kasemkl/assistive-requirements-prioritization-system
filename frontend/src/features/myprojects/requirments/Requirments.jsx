@@ -26,8 +26,7 @@ const randomData = generateData();
 
 const Requirments = () => {
   const param = useParams();
-  const project_id = parseInt(param.project_id);
-  console.log(project_id);
+  const { project_title, project_id } = param;
   const api = useAxios();
   const [requirments, setRequirments] = useState([]);
   const [render, setRender] = useState(false);
@@ -53,7 +52,7 @@ const Requirments = () => {
 
   return (
     <div className="requirments">
-      <h1>Requirments of {param.id}</h1>
+      <h1>Requirments of {project_title}</h1>
       <Link to={`add-requirments`} className="add-req">
         Add
       </Link>

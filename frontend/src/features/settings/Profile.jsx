@@ -3,39 +3,61 @@ import useAxios from "../../hooks/useAxios";
 import "../../styles/settings.css";
 import AuthContext from "../../contexts/AuthContext";
 import UserInfoContext from "../../contexts/UserInfoContext";
+import Loading from "../../ui/Loading";
+import Modal from "../../ui/Modal";
 
 const Profile = () => {
   const api = useAxios();
   const { user } = useContext(AuthContext);
   const { userInfo } = useContext(UserInfoContext);
+  const [loading, setLoading] = useState(true);
+  const [imageSrc, setImageSrc] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [modalText, setModalText] = useState({
+    title: "Profile Update",
+    body: "",
+  });
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
     email: "",
-    profile_photo: null, // Use null instead of an empty string for file upload
+    profile_photo: null,
   });
   const [passwords, setPasswords] = useState({
     old_password: "",
     new_password: "",
     confirmation_password: "",
   });
-  const [imageSrc, setImageSrc] = useState("");
+  const [errors, setErrors] = useState({
+    first_name: "",
+    last_name: "",
+  });
 
   useEffect(() => {
-    setFormData({
-      first_name: userInfo.first_name,
-      last_name: userInfo.last_name,
-      email: userInfo.email,
-      profile_photo: userInfo.profile_photo,
-    });
-  }, [userInfo]);
-  console.log(userInfo);
-  useEffect(() => {
-    setImageSrc(userInfo.profile_photo);
+    const fetchData = async () => {
+      setFormData({
+        first_name: userInfo.first_name,
+        last_name: userInfo.last_name,
+        email: userInfo.email,
+        profile_photo: userInfo.profile_photo,
+      });
+      setImageSrc(userInfo.profile_photo);
+      setLoading(false);
+    };
+
+    fetchData();
   }, [userInfo]);
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];
+    if (file && file.type !== "image/jpeg") {
+      setModalText({
+        title: "File Upload Error",
+        body: "Only JPEG files are allowed.",
+      });
+      setShowModal(true);
+      return;
+    }
     const reader = new FileReader();
 
     reader.onload = function (e) {
@@ -46,12 +68,30 @@ const Profile = () => {
 
     setFormData({
       ...formData,
-      profile_photo: file, // Set the file object directly
+      profile_photo: file,
     });
+  };
+
+  const validateName = (name) => {
+    return /^[a-zA-Z]+$/.test(name);
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    if (name === "first_name" || name === "last_name") {
+      if (!validateName(value)) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          [name]: "Only letters are allowed",
+        }));
+        return;
+      } else {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          [name]: "",
+        }));
+      }
+    }
     setFormData((prevFormData) => ({
       ...prevFormData,
       [name]: value,
@@ -66,49 +106,90 @@ const Profile = () => {
     }));
   };
 
+  const isStrongPassword = () => {
+    const hasLetter = /[a-zA-Z]/.test(passwords.new_password);
+    const hasDigit = /\d/.test(passwords.new_password);
+    return passwords.new_password.length > 7 && hasLetter && hasDigit;
+  };
+
+  const isPasswordMatch = () => {
+    return (
+      passwords.new_password &&
+      passwords.confirmation_password &&
+      passwords.new_password === passwords.confirmation_password
+    );
+  };
+
   const handleUpdateUserInfo = async () => {
+    if (errors.first_name || errors.last_name) {
+      setModalText({
+        title: "Profile Update",
+        body: "Please fix the errors before submitting.",
+      });
+      setShowModal(true);
+      return;
+    }
+
     try {
       const formDataToSend = new FormData();
-      // Append each form data field to formDataToSend
       Object.keys(formData).forEach((key) => {
         formDataToSend.append(key, formData[key]);
       });
 
-      // Check if 'profile_photo' exists and is not an object file
-      if (formData.profile_photo && !(formData.profile_photo instanceof File)) {
-        formDataToSend.delete("profile_photo");
-      }
-      for (var pair of formDataToSend.entries()) {
-        console.log(`${pair[0]}: ${pair[1]}`);
-      }
       const response = await api.patch(`user-information`, formDataToSend);
-      console.log(response.data);
       if (response.status === 200) {
-        alert(response.data.message);
+        setModalText({ title: "Profile Update", body: response.data.message });
       } else {
-        alert("error occurs.");
+        setModalText({ title: "Profile Update", body: "An error occurred." });
       }
+      setShowModal(true);
     } catch (error) {
       console.log(error);
+      setModalText({ title: "Profile Update", body: "An error occurred." });
+      setShowModal(true);
     }
   };
 
   const handleUpdatePassword = async () => {
+    if (!isStrongPassword() || !isPasswordMatch()) {
+      setModalText({
+        title: "Password Update",
+        body: "Password must be strong and match the confirmation.",
+      });
+      setShowModal(true);
+      return;
+    }
     try {
       const response = await api.put(`user-password`, passwords);
-      console.log(response.data);
       if (response.status === 200) {
-        alert(response.data.message);
+        setModalText({ title: "Password Update", body: response.data.message });
       } else {
-        alert("error occurs.");
+        setModalText({ title: "Password Update", body: response.data.detail });
       }
+      setShowModal(true);
     } catch (error) {
       console.log(error);
+      setModalText({
+        title: "Password Update",
+        body: error.response.data.detail,
+      });
+      setShowModal(true);
     }
   };
 
+  if (loading) return <Loading />;
+
   return (
     <div className="profile">
+      {showModal && (
+        <Modal
+          text={modalText}
+          onHide={() => {
+            setShowModal(false);
+            setModalText({ title: "Profile Update", body: "" });
+          }}
+        />
+      )}
       <div className="container">
         {!userInfo.first_name ? (
           <p>loading info....</p>
@@ -172,6 +253,9 @@ const Profile = () => {
                             onChange={handleInputChange}
                             value={formData.first_name}
                           />
+                          {errors.first_name && (
+                            <p className="error">{errors.first_name}</p>
+                          )}
                         </div>
                       </div>
                       <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
@@ -186,6 +270,9 @@ const Profile = () => {
                             onChange={handleInputChange}
                             value={formData.last_name}
                           />
+                          {errors.last_name && (
+                            <p className="error">{errors.last_name}</p>
+                          )}
                         </div>
                       </div>
                       <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
@@ -240,6 +327,9 @@ const Profile = () => {
                           value={passwords.new_password}
                           onChange={handlePasswordChange}
                         />
+                        {!isStrongPassword() && passwords.new_password && (
+                          <p className="error">Password is not strong enough</p>
+                        )}
                       </div>
                       <div className="form-group">
                         <label htmlFor="inputPassword6">Confirm Password</label>
@@ -251,6 +341,12 @@ const Profile = () => {
                           value={passwords.confirmation_password}
                           onChange={handlePasswordChange}
                         />
+                        {!isPasswordMatch() &&
+                          passwords.confirmation_password && (
+                            <p className="error">
+                              Confirmation password does not match
+                            </p>
+                          )}
                       </div>
                     </div>
 
@@ -263,6 +359,7 @@ const Profile = () => {
                         className="btn btn-primary"
                         style={{ marginLeft: "5px" }}
                         onClick={handleUpdatePassword}
+                        disabled={!isStrongPassword() || !isPasswordMatch()}
                       >
                         Update
                       </button>

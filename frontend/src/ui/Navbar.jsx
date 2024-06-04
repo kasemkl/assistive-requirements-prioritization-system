@@ -25,7 +25,7 @@ const Navbar = () => {
       setUsername(`${user.first_name} ${user.last_name}`);
     }
   }, [user]);
-  console.log(user);
+
   const handleLogout = () => {
     logoutUser();
     setUser({
@@ -67,6 +67,7 @@ const Navbar = () => {
                     border: "none",
                     outline: "none",
                     background: "transparent",
+                    color: "var(--theme-color-3)",
                   }}
                 >
                   <i className="bx bx-log-in"></i>

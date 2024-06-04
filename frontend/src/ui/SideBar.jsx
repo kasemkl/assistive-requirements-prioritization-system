@@ -25,7 +25,7 @@ const SideBar = () => {
         {userInfo.type === 1 ? (
           <>
             <li>
-              <Link to="dashboard">
+              <Link to="admin-dashboard">
                 <i className="bx bxs-dashboard"></i>
                 <span className="links_name">Dashboard</span>
               </Link>
@@ -50,7 +50,7 @@ const SideBar = () => {
         ) : (
           <>
             <li>
-              <Link to="dashboard">
+              <Link to="product-owner-dashboard">
                 <i className="bx bxs-dashboard"></i>
                 <span className="links_name">Dashboard</span>
               </Link>
@@ -100,7 +100,7 @@ const SideBar = () => {
               </div>
             </div>
           </div>
-          <i className="bx bx-log-out" id="log_out"></i>
+          <i className="bx bx-log-out" id="log_out" onClick={logoutUser}></i>
         </li>
       </ul>
     </div>

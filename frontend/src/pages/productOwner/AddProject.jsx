@@ -1,27 +1,40 @@
 import React, { useContext, useEffect, useState } from "react";
-import "../styles/add_project.css";
-import educationLogo from "../data/img/education-logo-template-design-illustration-icon-vector.jpg";
+import "../../styles/add_project.css";
 import useAxios from "../../hooks/useAxios";
 import AuthContext from "../../contexts/AuthContext";
+import Modal from "../../ui/Modal";
+import { MDBSpinner } from "mdb-react-ui-kit";
+import Loading from "../../ui/Loading";
 
 const AddProject = () => {
   const api = useAxios();
   const { baseURL } = useContext(AuthContext);
   const [categories, setCategories] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [modalText, setModalText] = useState({ title: "", body: "" });
   const [formData, setFormData] = useState({
     title: "",
     description: "",
     category_id: null,
   });
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        let response = await api.get("/categories");
-        console.log(response.data);
-        let data = await response.data; // Await the JSON parsing
-        setCategories(data);
+        const response = await api.get("/categories");
+        const data = await response.data;
+        console.log(data);
+        if (response.status === 200) {
+          setCategories(data);
+        } else {
+          alert("An error occurred while fetching categories.");
+        }
       } catch (error) {
         console.log(error);
+        alert("An error occurred while fetching categories.");
+      } finally {
+        setLoading(false);
       }
     };
     fetchCategories();
@@ -37,27 +50,56 @@ const AddProject = () => {
   };
 
   const handleAddProject = async () => {
+    if (!formData.title || !formData.description || !formData.category_id) {
+      setModalText({ title: "Failed", body: "All fields are required." });
+      setShowModal(true);
+      return;
+    }
+    if (!/^[a-zA-Z\s]+$/.test(formData.title)) {
+      setModalText({
+        title: "Project Title Error",
+        body: "Project title must contain only letters .",
+      });
+      setShowModal(true);
+      return;
+    }
+
     try {
       let response = await api.post("/projects", formData);
       let data = await response.data;
       console.log(data);
       if (response.status === 201) {
-        alert(data.message);
+        setModalText({
+          title: "Project Creating",
+          body: data.message,
+        });
+        setShowModal(true);
         setFormData({
           title: "",
           description: "",
           category_id: null,
         });
       } else {
-        alert("error occurs");
+        setModalText({
+          title: "Project Creating",
+          body: "New Project Adding Failed",
+        });
+        setShowModal(true);
       }
     } catch (error) {
       console.log(error);
     }
   };
-  console.log(categories);
+
+  if (loading) {
+    return <Loading />;
+  }
+
   return (
     <div className="container">
+      {showModal && (
+        <Modal text={modalText} onHide={() => setShowModal(false)} />
+      )}
       <h1>Add Project</h1>
       <div className="add-proj-req-form">
         <div className="add-project">

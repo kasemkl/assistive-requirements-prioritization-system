@@ -52,10 +52,7 @@ export default function UsersTable({ users, render, setRender }) {
                   className="rounded-circle"
                 />
                 <div className="ms-3">
-                  <p
-                    className="mb-0"
-                    style={{ color: "var(--color-grey-300)" }}
-                  >
+                  <p className="mb-0" style={{ color: "var(--theme-color-3)" }}>
                     {user.email}
                   </p>
                 </div>

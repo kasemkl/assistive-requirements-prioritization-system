@@ -9,3 +9,32 @@
   text-shadow: none !important;
   margin: 5px 0 0 5px;
 }
+
+.loading-btn {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  min-width: 140px;
+}
+
+.modal-dialog {
+  height: 100%;
+  align-items: center;
+  display: flex;
+}
+.modal-content {
+  font-size: 18px !important;
+  height: 18rem;
+}
+.modal-btn {
+  height: 30px !important;
+  font-size: 12px !important;
+}
+
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 75vh;
+  /* font-size: 40px; */
+}

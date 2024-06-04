@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import useAxios from "../../hooks/useAxios";
 import CategoryCard from "../../features/categories/CategoryCard";
-import "../styles/categories.css";
+import "../../styles/categories.css";
 import { Link } from "react-router-dom";
 const Categories = () => {
   const api = useAxios();
   const [categories, setCategories] = useState([]);
-
+  const [Render, setRender] = useState(true);
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -23,7 +23,7 @@ const Categories = () => {
       }
     };
     fetchCategories();
-  }, []);
+  }, [Render]);
   console.log(categories);
   return (
     <div className="container">
@@ -33,7 +33,14 @@ const Categories = () => {
           Add Category
         </Link>
         {categories.map((category) => {
-          return <CategoryCard key={category.id} category={category} />;
+          return (
+            <CategoryCard
+              key={category.id}
+              category={category}
+              Render={Render}
+              setRender={setRender}
+            />
+          );
         })}
       </div>
     </div>

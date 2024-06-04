@@ -5,10 +5,10 @@
   background-color: var(--secondary--color-1);
   padding: 10px !important;
   border-radius: 10px;
-  color: var(--color-grey-300) !important;
+  color: var(--theme-color-3) !important;
   text-align: center;
   caption-side: bottom;
-  border-collapse: separate !important;
+  border-collapse: collapse !important;
 }
 .table > thead {
   font-size: 16px !important;
@@ -23,9 +23,23 @@ tfoot,
 tr,
 td,
 th {
-  color: var(--color-grey-300) !important;
+  color: var(--theme-color-3) !important;
   border-color: inherit;
   border-style: solid;
   border-width: 0;
-  border-block-color: var(--color-custom-5) !important;
+  border-block-color: var(--theme-color-1) !important;
+}
+
+.top-req thead,
+tbody,
+tfoot,
+tr,
+td,
+th {
+  font-size: 12px !important;
+  color: var(--theme-color-3) !important;
+  border-color: inherit;
+  border-style: solid;
+  border-width: 0;
+  border-block-color: var(--color-3) !important;
 }

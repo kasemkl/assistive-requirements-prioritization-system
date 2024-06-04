@@ -5,14 +5,14 @@
   position: absolute;
   right: 10px;
   top: 8px;
-  background: var(--color-grey-700);
+  background: var(--theme-color-3);
   border-radius: 20px;
   color: var(--color-grey-200) !important;
   padding: 0 10px !important;
   font-size: 14px;
 }
 .add-req:hover {
-  background: var(--color-grey-500) !important;
+  background: var(--theme-color-4) !important;
   color: var(--color-grey-200) !important;
 }
 
@@ -30,14 +30,14 @@
   display: flex;
   flex-direction: column;
   margin: 10px;
-  color: var(--color-grey-100) !important   ;
+  color: var(--theme-color-3) !important   ;
 }
 .add-requirement .field input {
   color: var(--color-custom-1);
   border-radius: 5px;
   outline: none;
   border: solid 2px var(--color-grey-300);
-  background-color: var(--color-grey-200);
+  background-color: var(--theme-color-1);
   padding: 0 35px;
   border: none;
   outline: none;
@@ -46,9 +46,10 @@
 }
 
 .add-requirement select {
-  color: var(--color-custom-1);
+  color: var(--theme-color-4);
   height: 35px;
   font-size: 14px;
+  outline: none !important;
 }
 
 .req-way {
@@ -70,4 +71,18 @@
   background: var(--secondary--color-1);
   padding: 25px;
   border-radius: 14px;
+}
+.sources-btn {
+  position: absolute;
+  right: 125px;
+  top: 8px;
+  background: var(--theme-color-3);
+  border-radius: 20px;
+  color: var(--theme-color-2) !important;
+  padding: 0 7px !important;
+  font-size: 15px;
+}
+
+.sources-btn:hover {
+  background-color: var(--theme-color-4);
 }

@@ -1,14 +1,19 @@
 import React, { useCallback, useState } from "react";
-import { PieChart, Pie, Cell } from "recharts";
-import '../../styles/variables.css'
+import {
+  PieChart,
+  Pie,
+  Cell,
+  ResponsiveContainer,
+  Tooltip,
+  Legend,
+} from "recharts";
+import "../../styles/variables.css";
 
-const data = [
-  { name: "Group A", value: 400 },
-  { name: "Group B", value: 300 },
-  { name: "Group C", value: 300 },
-];
-
-const COLORS = ['var(--secondary--color-3)','var(--secondary--color-5)','var(--system--red-400)']; // Use CSS variable here
+// const data = [
+//   { name: "Group A", value: 400 },
+//   { name: "Group B", value: 300 },
+//   { name: "Group C", value: 300 },
+// ];
 
 const RADIAN = Math.PI / 180;
 const renderCustomizedLabel = ({
@@ -18,7 +23,9 @@ const renderCustomizedLabel = ({
   innerRadius,
   outerRadius,
   percent,
-  index
+  index,
+  name,
+  value,
 }) => {
   const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
   const x = cx + radius * Math.cos(-midAngle * RADIAN);
@@ -32,30 +39,50 @@ const renderCustomizedLabel = ({
       textAnchor={x > cx ? "start" : "end"}
       dominantBaseline="central"
     >
-      {`${(percent * 100).toFixed(0)}%`}
+      {` ${(percent * 100).toFixed(0)}%`}
     </text>
   );
 };
-export default function MyPieChart() {
+export default function MyPieChart({ data, value, COLORS, height, width }) {
   return (
-    <div className="chart">
-
-    <PieChart width={400} height={400}>
-      <Pie
-        data={data}
-        cx={200}
-        cy={200}
-        labelLine={false}
-        label={renderCustomizedLabel}
-        outerRadius={100}
-        fill="blue"
-        dataKey="value"
-        >
-        {data.map((entry, index) => (
-          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+    <div className="">
+      <div className="chart-title">
+        <p>Reviews By Polarity</p>
+      </div>
+      <ResponsiveContainer width={width} height={height}>
+        <PieChart>
+          <Tooltip />
+          <Pie
+            data={data}
+            cx={150}
+            cy={90}
+            innerRadius={60}
+            outerRadius={80}
+            fill="#8884d8"
+            paddingAngle={5}
+            dataKey="value"
+          >
+            {data.map((entry, index) => (
+              <Cell
+                key={`cell-${index}`}
+                fill={COLORS[index % COLORS.length]}
+              />
+            ))}
+          </Pie>
+        </PieChart>
+        {data.map((sent, index) => (
+          <div
+            className={`${sent.name.toLowerCase()} sentiment`}
+            key={sent.name}
+          >
+            <p
+              className={`square-${sent.name.toLowerCase()}`}
+              style={{ backgroundColor: COLORS[index] }}
+            ></p>
+            <p>{sent.name}</p>
+          </div>
         ))}
-      </Pie>
-    </PieChart>
-        </div>
+      </ResponsiveContainer>
+    </div>
   );
 }

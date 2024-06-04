@@ -8,7 +8,7 @@ import ReviewTable from "./ReviewsTable";
 const Reviews = () => {
   const param = useParams();
   const project_id = parseInt(param.project_id);
-  console.log(project_id);
+  const project_title = param.project_title;
   const api = useAxios();
   const [reviews, setReviews] = useState([]);
   const [render, setRender] = useState(false);
@@ -34,12 +34,23 @@ const Reviews = () => {
 
   return (
     <div className="requirments">
-      <h1>Last 10 Reviews of Project {param.id}</h1>
+      <h1>Last 10 Reviews of Project {project_title}</h1>
       <Link to={`add-reviews`} className="add-req">
         Add Reviews
       </Link>
+      <Link to={`sources`} className="sources-btn">
+        Sources
+      </Link>
       <div className="requirments-table">
-        <ReviewTable reviews={reviews} setRender={setRender} render={render} />
+        {reviews.length > 0 ? (
+          <ReviewTable
+            reviews={reviews}
+            setRender={setRender}
+            render={render}
+          />
+        ) : (
+          <p>loading data</p>
+        )}
       </div>
     </div>
   );

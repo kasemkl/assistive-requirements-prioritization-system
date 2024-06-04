@@ -96,7 +96,7 @@ html {
 
 body {
   font-family: "Poppins", sans-serif;
-  color: var(--color-grey-100);
+  color: var(--theme-color-3);
   transition:
     color 0.3s,
     background-color 0.3s;
@@ -159,6 +159,7 @@ h5,
 h6 {
   overflow-wrap: break-word;
   hyphens: auto;
+  color: var(--theme-color-4) !important;
 }
 
 img {

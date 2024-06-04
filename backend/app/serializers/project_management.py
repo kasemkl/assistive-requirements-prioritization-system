@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from app.models import ProjectCategory , Project , Requirements , Account
+from app.models import ProjectCategory , Project , Requirements , Account, Source
 
 
 #this serializer for the category model with out relationships
@@ -29,13 +29,19 @@ class project_serializer(serializers.ModelSerializer):
         fields=['id','title','description','category_id']
 
 
-
-
-
-
 class RequirementSerializer(serializers.ModelSerializer):
     project_id = serializers.PrimaryKeyRelatedField(queryset=Project.objects.all())
 
     class Meta:
         model = Requirements
-        fields = ['id', 'requirement_text', 'requirements_priority', 'project_id', 'addition_date']
+        fields = ['id', 'requirement_text', 'requirements_priority', 'project_id', 'addition_date','positive_reviews_count','negative_reviews_count']
+
+
+class sources_serializer(serializers.ModelSerializer):
+    
+    source_name=serializers.CharField(max_length=40)
+    class Meta:
+        model = Source
+        fields=['id','source_name','source_type','project_id']
+
+

@@ -1,16 +1,13 @@
 import Profile from "../features/settings/Profile";
-import Heading from "../ui/Heading";
 
 function Settings() {
-  
-  return(
-  <div>
+  return (
+    <div>
+      <h1>Profile settings</h1>
 
-  <Heading as="h1">Profile settings</Heading>
-  
-  <Profile/>
-  </div>)
-;
+      <Profile />
+    </div>
+  );
 }
 
 export default Settings;

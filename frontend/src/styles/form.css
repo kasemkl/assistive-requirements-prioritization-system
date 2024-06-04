@@ -5,7 +5,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--secondary--color-1);
+  background-color: var(--theme-color-1);
 }
 
 .login fieldset {
@@ -19,12 +19,15 @@
   flex-direction: column !important;
   background-color: #fff;
   box-shadow: 0 4px 8px rgb(49 36 73 / 17%);
+  color: var(--color-custom-1);
 }
 
 .Form .title {
   position: relative;
   font-size: 27px;
   font-weight: 600;
+  text-align: center;
+  color: var(--theme-color-3);
 }
 label {
   margin-bottom: 8px;
@@ -87,7 +90,7 @@ select:focus {
   border-radius: 5px;
   outline: none;
   border: solid 2px var(--color-grey-300);
-  background-color: var(--color-grey-200);
+  background-color: var(--theme-color-1);
   padding: 0 35px;
   border: none;
   outline: none;
@@ -104,7 +107,7 @@ fieldset .button button {
   font-weight: 500;
   letter-spacing: 1px;
   border-radius: 6px;
-  background-color: var(--neutral--700) !important;
+  background-color: var(--theme-color-4) !important;
   cursor: pointer;
   transition: all 0.3s ease;
   opacity: 1 !important;
