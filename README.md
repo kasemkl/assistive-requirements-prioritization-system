@@ -1,2 +1,4 @@
 # assistive-requirements-prioritization-system
-An assistive system in collecting software requirements and determining their priorities based on user reviews
+The primary objective of this project is to develop a software system that assists software product owners in improving their software efficiently, ensuring that enhancements align with user needs for maximum satisfaction and marketability.
+To achieve this, the system will utilize AI algorithms and techniques to gather and analyze user reviews, enabling the processing of large volumes of feedback and the identification of key insights and user sentiment. Additionally, the system will provide insights through detailed reports and dashboards generated after the analysis phase. These tools will equip product owners with valuable information, helping them make informed decisions about software improvements and prioritize development efforts based on user feedback. Ultimately, these objectives aim to streamline the software development process,
+ensuring that product enhancements are user-driven and data-informed, leading to higher user satisfaction and improved product performance.
